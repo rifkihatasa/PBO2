@@ -188,19 +188,19 @@ public class berita extends javax.swing.JFrame {
     }//GEN-LAST:event_txtidberitaActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-   new dbCRUD().SimpanDinamiscBerita(txtidberita.getText(), txtjudul.getText(), txtisi.getText(), txtKDgambar.getText(), txttgl.getText(), txtjam.getText());
+   new dbCRUD().SimpanBerita(txtidberita.getText(), txtjudul.getText(), txtisi.getText(), txtKDgambar.getText(), txttgl.getText(), txtjam.getText());
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-//        String field[]={"judul","isi","kdgambar","tgl","jam"}; 
-//        String data[]={txtjudul.getText(),txtisi.getText(),txtKDgambar.getText(),txttgl.getText(), txtjam.getText(),
-//        txtjudul.getText(),txtisi.getText(),txtKDgambar.getText(),txttgl.getText(), txtjam.getText(),};
-//        
-//        crud.UbahDinamis("1", "No", txtidberita.getText(), field, data);
+        String field[]={"judul","isi","kdgambar","tgl","jam"}; 
+        String data[]={txtjudul.getText(),txtisi.getText(),txtKDgambar.getText(),txttgl.getText(), txtjam.getText(),
+        txtjudul.getText(),txtisi.getText(),txtKDgambar.getText(),txttgl.getText(), txtjam.getText()};
+        
+        crud.UbahDinamis("berita", "idberita", txtidberita.getText(), field, data);
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-//        crud.HapusDinamis("skorkelasjenistanah", "No", txtidberita.getText());
+        crud.HapusDinamis("berita", "idberita", txtidberita.getText());
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void txtKDgambarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtKDgambarActionPerformed

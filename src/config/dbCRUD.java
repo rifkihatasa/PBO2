@@ -72,7 +72,7 @@ public class dbCRUD {
         return hasil;
     }
     
-    public void SimpanDinamiscContact(String noktp, String nama, String alamat, String email, String keluhan_saran) {
+    public void SimpanContact(String noktp, String nama, String alamat, String email, String keluhan_saran) {
         try {
             if (duplicateKey("contact", "noktp", noktp)) {
                 JOptionPane.showMessageDialog(null, "No KTP sudah Terdaftar");
@@ -93,7 +93,7 @@ public class dbCRUD {
         }
     }
     
-    public void SimpanDinamiscBerita(String idberita, String judul, String isi, String Kdgambar, String tgl, String jam) {
+    public void SimpanBerita(String idberita, String judul, String isi, String Kdgambar, String tgl, String jam) {
         try {
             if (duplicateKey("berita", "idberita", idberita)) {
                 JOptionPane.showMessageDialog(null, "ID Berita sudah Terdaftar");
