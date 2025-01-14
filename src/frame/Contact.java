@@ -1,46 +1,72 @@
 package frame;
 
-import java.sql.Connection;
-import java.sql.Driver;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.sql.PreparedStatement;
-import java.sql.Statement;
-import java.sql.ResultSet;
-import javax.swing.JOptionPane;
 import config.dbCRUD;
+import javax.swing.JOptionPane;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import javax.swing.table.DefaultTableModel;
+import java.sql.PreparedStatement;
 
 public class contact extends javax.swing.JFrame {
     
-    String jdbcURL ="jdbc:mysql://localhost:3306/pemetaan_kehutanan";
-    String username ="root";
-    String password ="";
-    
-    private Connection KoneksiDatabase;
-    private dbCRUD crud = new dbCRUD();
+    private dbCRUD myConfig;
+    String[] judulKolom = {"Nomor KTP", "Nama", "Alamat", "Email", "Keluhan atau Saran"};
+    int[] lebarKolom = {120, 300, 150, 100, 100};
+    String Sql = "select * from contact";
+    private dbCRUD crud;
 
-    /**
-     * Creates new form beritaFrame
-     */
     public contact() {
         initComponents();
-        this.setLocationRelativeTo(null);
-        
-        try {
-            Driver driverku = new com.mysql.jdbc.Driver(); 
-            DriverManager.registerDriver(driverku);
-            KoneksiDatabase = DriverManager.getConnection(jdbcURL, username, password);
-            System.out.println("Frame berhasil dikoneksikan ke database");
-        } catch (Exception e) {
-            System.err.println("Koneksi ke database gagal: " + e.toString());
+        this.setLocationRelativeTo(null); // meletakan posisi form berada ditengah windows
+        crud = new dbCRUD();
+        loaddata();
         }
+    
+        void loaddata(){
+        crud.settingJudulTabel(tablecontact, judulKolom);
+        crud.settingLebarKolom(tablecontact, lebarKolom);
+        crud.tampilTabel(tablecontact, Sql, judulKolom);
     }
+        
+    private void cariData(String sql, String keyword) {
+    try {
+        // Gunakan PreparedStatement untuk menghindari SQL injection
+        PreparedStatement pst = crud.getKoneksi().prepareStatement(sql);
+        pst.setString(1, keyword); // Menggunakan parameter pertama untuk LIKE id_surat
+        pst.setString(2, keyword); // Menggunakan parameter kedua untuk LIKE sender
+
+        ResultSet rs = pst.executeQuery();
+        DefaultTableModel model = (DefaultTableModel) tablecontact.getModel();
+        model.setRowCount(0);  // Menghapus data lama
+
+        // Menambahkan data hasil query ke tabel
+        while (rs.next()) {
+            Object[] row = new Object[judulKolom.length];
+            for (int i = 0; i < judulKolom.length; i++) {
+                row[i] = rs.getObject(i + 1); // Mengambil data dari ResultSet
+            }
+            model.addRow(row); // Menambahkan baris ke model tabel
+            }
+        } catch (SQLException e) {
+              e.printStackTrace();
+        }   
+    }
+    
+    private void bersihForm() {
+        textktp.setText("");
+        txtnama.setText("");
+        txtalamat.setText("");
+        txtemail.setText("");
+        txtkeluhan.setText("");
+        textktp.requestFocus();
+    }
+    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
         jLabel2 = new javax.swing.JLabel();
-        jButton3 = new javax.swing.JButton();
+        btnhapus = new javax.swing.JButton();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
@@ -49,18 +75,25 @@ public class contact extends javax.swing.JFrame {
         txtalamat = new javax.swing.JTextField();
         txtemail = new javax.swing.JTextField();
         txtkeluhan = new javax.swing.JTextField();
-        jButton1 = new javax.swing.JButton();
+        btnsimpan = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
-        jButton2 = new javax.swing.JButton();
+        btnedit = new javax.swing.JButton();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        tablecontact = new javax.swing.JTable();
+        jLabel6 = new javax.swing.JLabel();
+        txtnoktp = new javax.swing.JTextField();
+        btncari = new javax.swing.JButton();
+        printbtn = new javax.swing.JButton();
+        btnbersih = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jLabel2.setText("nama");
 
-        jButton3.setText("Hapus");
-        jButton3.addActionListener(new java.awt.event.ActionListener() {
+        btnhapus.setText("Hapus");
+        btnhapus.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton3ActionPerformed(evt);
+                btnhapusActionPerformed(evt);
             }
         });
 
@@ -82,19 +115,61 @@ public class contact extends javax.swing.JFrame {
             }
         });
 
-        jButton1.setText("Simpan");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        btnsimpan.setText("Simpan");
+        btnsimpan.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                btnsimpanActionPerformed(evt);
             }
         });
 
         jLabel1.setText("no ktp");
 
-        jButton2.setText("Edit");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
+        btnedit.setText("Edit");
+        btnedit.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
+                btneditActionPerformed(evt);
+            }
+        });
+
+        tablecontact.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jScrollPane1.setViewportView(tablecontact);
+
+        jLabel6.setText("Nomor KTP");
+
+        txtnoktp.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtnoktpActionPerformed(evt);
+            }
+        });
+
+        btncari.setText("Cari");
+        btncari.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btncariActionPerformed(evt);
+            }
+        });
+
+        printbtn.setText("PRINT");
+        printbtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                printbtnActionPerformed(evt);
+            }
+        });
+
+        btnbersih.setText("bersih");
+        btnbersih.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnbersihActionPerformed(evt);
             }
         });
 
@@ -106,71 +181,103 @@ public class contact extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel1)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel1)
+                            .addComponent(jLabel2)
+                            .addComponent(jLabel3)
+                            .addComponent(jLabel4))
                         .addGap(51, 51, 51)
-                        .addComponent(textktp))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(jLabel2)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(txtnama, javax.swing.GroupLayout.PREFERRED_SIZE, 280, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(jLabel3)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(txtalamat, javax.swing.GroupLayout.PREFERRED_SIZE, 280, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(jLabel4)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(txtemail, javax.swing.GroupLayout.PREFERRED_SIZE, 280, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(jLabel5)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 15, Short.MAX_VALUE)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(txtemail)
+                            .addComponent(txtalamat)
+                            .addComponent(txtnama)
+                            .addComponent(textktp, javax.swing.GroupLayout.PREFERRED_SIZE, 280, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel5)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(txtkeluhan, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 280, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(jButton1)
-                                .addGap(26, 26, 26)
-                                .addComponent(jButton2)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jButton3))
-                            .addComponent(txtkeluhan, javax.swing.GroupLayout.PREFERRED_SIZE, 280, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addGap(26, 26, 26))
+                                .addComponent(btnsimpan)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(btnedit)
+                                .addGap(18, 18, 18)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(btnbersih)
+                                    .addComponent(btnhapus))))))
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(txtnoktp, javax.swing.GroupLayout.PREFERRED_SIZE, 191, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(btncari))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 401, Short.MAX_VALUE)
+                    .addComponent(printbtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(15, 15, 15)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1)
-                    .addComponent(textktp, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(21, 21, 21)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel2)
-                    .addComponent(txtnama, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel3)
-                    .addComponent(txtalamat, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel4)
-                    .addComponent(txtemail, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel5)
-                    .addComponent(txtkeluhan, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 40, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton1)
-                    .addComponent(jButton2)
-                    .addComponent(jButton3))
-                .addGap(37, 37, 37))
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel1)
+                            .addComponent(textktp, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(9, 9, 9)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtnoktp, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btncari))))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel2)
+                            .addComponent(txtnama, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(21, 21, 21)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel3)
+                            .addComponent(txtalamat, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel4)
+                            .addComponent(txtemail, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel5)
+                            .addComponent(txtkeluhan, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(btnsimpan)
+                            .addComponent(btnedit)
+                            .addComponent(btnhapus))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(btnbersih))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 257, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(printbtn)
+                .addContainerGap(12, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+    private void btnhapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnhapusActionPerformed
+        int confirm = JOptionPane.showConfirmDialog(this, 
+        "Apakah anda yakin ingin menghapus data ini?", 
+        "Konfirmasi Hapus", 
+        JOptionPane.YES_NO_OPTION);
+        
+    if (confirm == JOptionPane.YES_OPTION) {
         crud.HapusDinamis("contact", "noktp", textktp.getText());
-    }//GEN-LAST:event_jButton3ActionPerformed
+        loaddata();
+        bersihForm();
+    }
+    }//GEN-LAST:event_btnhapusActionPerformed
 
     private void textktpActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_textktpActionPerformed
         // TODO add your handling code here:
@@ -180,17 +287,66 @@ public class contact extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_txtalamatActionPerformed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        new dbCRUD().SimpanContact(textktp.getText(), txtalamat.getText(), txtemail.getText(), txtkeluhan.getText(), txtnama.getText());
-    }//GEN-LAST:event_jButton1ActionPerformed
+    private void btnsimpanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnsimpanActionPerformed
+    String[] fields = {"noktp", "nama", "alamat", "email", "keluhan_saran"};
+    String[] values = {
+        textktp.getText(),
+        txtnama.getText(),
+        txtalamat.getText(),
+        txtemail.getText(),
+        txtkeluhan.getText()
+    };
+    
+    if (crud.DuplicateKey("contact", "noktp", values[0])) {
+        JOptionPane.showMessageDialog(this, "Nomor KTP Sudah Ada!");
+        return;
+    }
+    
+    crud.simpanDinamis("contact", fields, values);
+    loaddata();
+    bersihForm();
+    }//GEN-LAST:event_btnsimpanActionPerformed
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        String field[]={"nama","alamat","email","keluhan_saran"}; 
-        String data[]={txtalamat.getText(),txtemail.getText(),txtkeluhan.getText(),txtnama.getText(),
-        txtalamat.getText(),txtemail.getText(),txtkeluhan.getText(),txtnama.getText()};
-        
-        crud.UbahDinamis("contact", "noktp", textktp.getText(), field, data);
-    }//GEN-LAST:event_jButton2ActionPerformed
+    private void btneditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btneditActionPerformed
+    String[] fields = {"noktp", "nama", "alamat", "email", "keluhan_saran"};
+    String[] values = {
+        textktp.getText(),
+        txtnama.getText(),
+        txtalamat.getText(),
+        txtemail.getText(),
+        txtkeluhan.getText()
+    };
+    
+    crud.UbahDinamis("contact", "noktp", textktp.getText(), fields, values);
+        loaddata();
+        bersihForm();
+    }//GEN-LAST:event_btneditActionPerformed
+
+    private void txtnoktpActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtnoktpActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtnoktpActionPerformed
+
+    private void btncariActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btncariActionPerformed
+    String keyword = txtnoktp.getText();
+
+    // Query pencarian menggunakan LIKE untuk id_surat dan sender
+    String sql = "SELECT * FROM contact WHERE noktp LIKE ? OR nama LIKE ? ORDER BY noktp ASC";
+    
+    // Panggil fungsi cariData dengan query dan keyword
+    cariData(sql, "%" + keyword + "%");
+    }//GEN-LAST:event_btncariActionPerformed
+
+    private void printbtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_printbtnActionPerformed
+        try {
+            crud.tampilLaporan("src/laporan/contact.jrxml", "SELECT * FROM contact");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }//GEN-LAST:event_printbtnActionPerformed
+
+    private void btnbersihActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnbersihActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnbersihActionPerformed
 
     /**
      * @param args the command line arguments
@@ -231,18 +387,25 @@ public class contact extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
+    private javax.swing.JButton btnbersih;
+    private javax.swing.JButton btncari;
+    private javax.swing.JButton btnedit;
+    private javax.swing.JButton btnhapus;
+    private javax.swing.JButton btnsimpan;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JButton printbtn;
+    private javax.swing.JTable tablecontact;
     private javax.swing.JTextField textktp;
     private javax.swing.JTextField txtalamat;
     private javax.swing.JTextField txtemail;
     private javax.swing.JTextField txtkeluhan;
     private javax.swing.JTextField txtnama;
+    private javax.swing.JTextField txtnoktp;
     // End of variables declaration//GEN-END:variables
 }

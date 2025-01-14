@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="beritaReport" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="b03f055c-4d98-434e-ae57-caba407ee932">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<queryString language="SQL">
+		<![CDATA[SELECT * FROM berita]]>
+	</queryString>
+	<field name="idberita" class="java.lang.Integer"/>
+	<field name="judul" class="java.lang.String"/>
+	<field name="isi" class="java.lang.String"/>
+	<field name="Kdgambar" class="java.lang.String"/>
+	<field name="tgl" class="java.lang.String"/>
+	<field name="jam" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="50" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="0" width="555" height="30" uuid="2e2333c5-e54b-4adc-9b1c-eddf7e4d9d44"/>
+				<text><![CDATA[Laporan Berita]]></text>
+			</staticText>
+		</band>
+	</title>
+	<columnHeader>
+		<band height="30" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="0" width="50" height="20" uuid="2b972619-0942-465a-806e-1a4815d7c8f0"/>
+				<text><![CDATA[ID]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="60" y="0" width="100" height="20" uuid="f827311a-7234-4132-8708-bee00d74abdd"/>
+				<text><![CDATA[Judul]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="170" y="0" width="150" height="20" uuid="e4eec558-d722-413e-a884-2872cf1470d4"/>
+				<text><![CDATA[Isi]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="330" y="0" width="100" height="20" uuid="cf532e3c-0780-400a-b9a6-234fbfed81f6"/>
+				<text><![CDATA[Kode Gambar]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="440" y="0" width="60" height="20" uuid="cf352940-74b7-4159-84b6-bd2a53158e8f"/>
+				<text><![CDATA[Tanggal]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="510" y="0" width="50" height="20" uuid="3ebfdc5a-e672-47ea-a883-eef6f9eba143"/>
+				<text><![CDATA[Jam]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="0" width="50" height="20" uuid="73348590-6e6b-45ce-ab69-9e87a7d208f9"/>
+				<textFieldExpression><![CDATA[$F{idberita}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="60" y="0" width="100" height="20" uuid="571f234c-961e-4821-a796-85f770cf7c46"/>
+				<textFieldExpression><![CDATA[$F{judul}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="170" y="0" width="150" height="20" uuid="544e43a0-905a-4f31-b72d-05a975f96a15"/>
+				<textFieldExpression><![CDATA[$F{isi}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="330" y="0" width="100" height="20" uuid="d570e60c-b112-4b38-811a-46036be0e4ee"/>
+				<textFieldExpression><![CDATA[$F{Kdgambar}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="440" y="0" width="60" height="20" uuid="7942f8f6-e864-413d-8a6e-2c33067ebcbe"/>
+				<textFieldExpression><![CDATA[$F{tgl}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="510" y="0" width="50" height="20" uuid="803de810-2a6d-4f40-962f-20d929e2409f"/>
+				<textFieldExpression><![CDATA[$F{jam}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="20" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="30" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="0" width="555" height="20" uuid="169139a0-60b5-4424-82bb-4364b7fae2fc"/>
+				<text><![CDATA[Laporan Berita]]></text>
+			</staticText>
+		</band>
+	</pageFooter>
+</jasperReport>

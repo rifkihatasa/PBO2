@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="contactReport" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="e24d8ae6-d774-4974-b9ee-9e5f211b72b2">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<queryString language="SQL">
+		<![CDATA[SELECT * FROM contact]]>
+	</queryString>
+	<field name="noktp" class="java.lang.String"/>
+	<field name="nama" class="java.lang.String"/>
+	<field name="alamat" class="java.lang.String"/>
+	<field name="email" class="java.lang.String"/>
+	<field name="keluhan_saran" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="50" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="0" width="555" height="30" uuid="1a7b5e85-bd45-40df-9313-7b521fdfe4b2"/>
+				<text><![CDATA[Laporan Kontak]]></text>
+			</staticText>
+		</band>
+	</title>
+	<columnHeader>
+		<band height="30" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="0" width="80" height="20" uuid="a7e41c47-7ca9-4a23-b4ed-326052d98891"/>
+				<text><![CDATA[No. KTP]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="90" y="0" width="100" height="20" uuid="d3a07508-1c57-448e-8d76-e27d3d2ce956"/>
+				<text><![CDATA[Nama]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="200" y="0" width="150" height="20" uuid="055d3ed8-c40a-48b5-b184-28eaa96e9779"/>
+				<text><![CDATA[Alamat]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="360" y="0" width="100" height="20" uuid="6ba13957-e980-4b1a-b3d3-b6e3ea6b9f82"/>
+				<text><![CDATA[Email]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="470" y="0" width="100" height="20" uuid="b1dd8b22-8a54-4eab-974c-517c7870e4c6"/>
+				<text><![CDATA[Keluhan/Saran]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="0" width="80" height="20" uuid="f257a6c3-5bd0-461f-b14a-bb3997517815"/>
+				<textFieldExpression><![CDATA[$F{noktp}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="90" y="0" width="100" height="20" uuid="48009148-2b4b-423e-a501-51cc1bf86e0c"/>
+				<textFieldExpression><![CDATA[$F{nama}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="200" y="0" width="150" height="20" uuid="baac7230-2119-43ce-9fba-9672272987e1"/>
+				<textFieldExpression><![CDATA[$F{alamat}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="360" y="0" width="100" height="20" uuid="86d99cb5-c3c0-4725-ae7d-8927e4c7fca0"/>
+				<textFieldExpression><![CDATA[$F{email}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="470" y="0" width="100" height="20" uuid="20fd4057-a376-4bf0-bd2a-7e376cf42a4e"/>
+				<textFieldExpression><![CDATA[$F{keluhan_saran}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="20" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="30" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="0" width="555" height="20" uuid="9541c6c0-d645-455c-a94f-44abccc93e37"/>
+				<text><![CDATA[Laporan Kontak]]></text>
+			</staticText>
+		</band>
+	</pageFooter>
+</jasperReport>
